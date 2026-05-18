@@ -6,8 +6,8 @@ local HttpService = game:GetService("HttpService")
 local Players     = game:GetService("Players")
 local player      = Players.LocalPlayer
 
-local SUPABASE_URL      = "https://YOUR_PROJECT.supabase.co"
-local SUPABASE_ANON_KEY = "YOUR_ANON_KEY"
+local SUPABASE_URL      = "https://qnftmkqrdegojzfjxdbi.supabase.co"
+local SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuZnRta3FyZGVnb2p6Zmp4ZGJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMzExNDgsImV4cCI6MjA5NDcwNzE0OH0.KkKGbvfdSYWKh_EgSrbeQ9Ccul8_xxNTfa1xIjn0sTM"
 
 -- Read the key the user set before calling loadstring
 local key = getgenv().script_key
