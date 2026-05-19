@@ -90,7 +90,7 @@ if row.status ~= "active" then
     return
 end
 
-if row.hwid == nil or row.hwid == HttpService.JSONNull then
+if row.hwid == nil then
     req("PATCH", "keys?key=eq." .. key, {
         hwid      = hwid,
         last_seen = os.date("!%Y-%m-%dT%H:%M:%SZ"),
