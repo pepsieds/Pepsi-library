@@ -30,10 +30,10 @@ end
 
 local hwid = getHWID()
 
--- Fetch key from Supabase
-local function request(method, endpoint, body)
+-- HTTP request using executor's request() function
+local function req(method, endpoint, body)
     local ok, res = pcall(function()
-        return HttpService:RequestAsync({
+        return request({
             Url    = SUPABASE_URL .. "/rest/v1/" .. endpoint,
             Method = method,
             Headers = {
@@ -45,11 +45,19 @@ local function request(method, endpoint, body)
             Body = body and HttpService:JSONEncode(body) or nil,
         })
     end)
-    if not ok or not res.Success then return nil end
-    return HttpService:JSONDecode(res.Body)
+
+    if not ok then return nil end
+    if not res or res.StatusCode < 200 or res.StatusCode >= 300 then return nil end
+
+    if res.Body and res.Body ~= "" then
+        local decoded = HttpService:JSONDecode(res.Body)
+        return decoded
+    end
+
+    return true -- PATCH returns empty body
 end
 
-local data = request("GET", "keys?key=eq." .. HttpService:UrlEncode(key) .. "&select=key,status,hwid")
+local data = req("GET", "keys?key=eq." .. key .. "&select=key,status,hwid")
 
 if not data or #data == 0 then
     error("[Armor] Invalid key.")
@@ -70,7 +78,7 @@ end
 
 if row.hwid == nil or row.hwid == HttpService.JSONNull then
     -- First use — lock HWID
-    request("PATCH", "keys?key=eq." .. HttpService:UrlEncode(key), {
+    req("PATCH", "keys?key=eq." .. key, {
         hwid      = hwid,
         last_seen = os.date("!%Y-%m-%dT%H:%M:%SZ"),
     })
@@ -80,7 +88,7 @@ elseif row.hwid ~= hwid then
     return
 else
     -- Update last seen
-    request("PATCH", "keys?key=eq." .. HttpService:UrlEncode(key), {
+    req("PATCH", "keys?key=eq." .. key, {
         last_seen = os.date("!%Y-%m-%dT%H:%M:%SZ"),
     })
 end
