@@ -28,7 +28,28 @@ local SUPABASE_URL      = xd(_U,  _K)
 local SUPABASE_ANON_KEY = xd(_AK, _K)
 local SCRIPT_URL        = xd(_SU, _K)
 
--- Read key
+local function _ad()
+    local _d = false
+    local _ols = loadstring
+    if getgenv().loadstring and getgenv().loadstring ~= _ols then _d = true end
+    pcall(function()
+        if shared.GCDump or shared.ScanShared or shared.FindURLs or shared.DumperCleanup then _d = true end
+    end)
+    pcall(function()
+        if isfolder and isfolder("dumps") then
+            local f = listfiles and listfiles("dumps") or {}
+            if #f > 0 then _d = true end
+        end
+    end)
+    if _d then
+        game:GetService("Players").LocalPlayer:Kick("\n[Clarity Anti-Dump]\n\nDumper detected.\nDisable dumping tools and try again.")
+        return false
+    end
+    return true
+end
+
+if not _ad() then return end
+
 local key = getgenv().script_key
 
 if not key or key == "" or key == "YOUR_KEY_HERE" then
