@@ -76,7 +76,7 @@ if row.status ~= "active" then
     return
 end
 
-if row.hwid == nil or row.hwid == HttpService.JSONNull then
+if row.hwid == nil then
     -- First use — lock HWID
     req("PATCH", "keys?key=eq." .. key, {
         hwid      = hwid,
